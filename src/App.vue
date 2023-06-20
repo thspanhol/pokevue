@@ -4,11 +4,10 @@
     <router-link to="/charizard">Pokemon</router-link>
   </nav>
   <router-view/>
-  <h1>{{ this.pokemon }}</h1>
   <h1>Thales Spanhol</h1>
-  <h1 v-if="pokedex === 'loading'">Carregando...</h1>
+  <h1 v-if="loading">Carregando...</h1>
   <div v-else>
-    <div v-for="pokemons in pokedex" :key="pokemons.data.id" @click="selectPokemon(pokemons.data.name)"><router-link :to="pokemons.data.name">{{ pokemons.data.name }}</router-link></div>
+    <div v-for="pokemons in $store.state.pokedex" :key="pokemons.data.id" @click="selectPokemon(pokemons.data)"><router-link :to="pokemons.data.name">{{ pokemons.data.name }}</router-link></div>
   </div>
 </template>
 
@@ -19,8 +18,7 @@ export default {
   name: 'App',
   data() {
     return {
-      pokedex: 'loading',
-      pokemon: '',
+      loading: true,
     }
   },
   created() {
@@ -30,7 +28,7 @@ export default {
     async getPokemons() {
     let results = [];
     await axios
-      .get('https://pokeapi.co/api/v2/pokemon?limit=151')
+      .get('https://pokeapi.co/api/v2/pokemon?limit=9')
       .then((res) => (results = res.data.results || res.data.pokemon))
       .catch((err) => console.log(err));
     let endPoints = results.map((e) => e.url || e.pokemon.url);
@@ -38,10 +36,11 @@ export default {
       .all(endPoints.map((endpoint) => axios.get(endpoint)))
       .then((res) => results = res);
       console.log(results);
-      this.pokedex = results;
+      this.$store.commit('storePokedex', results);
+      this.loading = false;
   },
-  selectPokemon(e) {
-    this.pokemon = e;
+  selectPokemon(pokeData) {
+    this.$store.commit('storePokemon', pokeData);
   },
   }
 }
