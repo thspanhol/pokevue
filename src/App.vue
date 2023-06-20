@@ -1,14 +1,14 @@
 <template>
   <nav>
-    <router-link to="/">Home</router-link> |
-    <router-link to="/about">About</router-link>
+    <router-link to="/">Pokedex</router-link> |
+    <router-link to="/charizard">Pokemon</router-link>
   </nav>
-  <!-- <router-view/> -->
+  <router-view/>
   <h1>{{ this.pokemon }}</h1>
   <h1>Thales Spanhol</h1>
   <h1 v-if="pokedex === 'loading'">Carregando...</h1>
   <div v-else>
-    <h2 v-for="pokemons in pokedex" :key="pokemons.data.id" @click="selectPokemon(pokemons.data.name)">{{ pokemons.data.name }}</h2>
+    <div v-for="pokemons in pokedex" :key="pokemons.data.id" @click="selectPokemon(pokemons.data.name)"><router-link :to="pokemons.data.name">{{ pokemons.data.name }}</router-link></div>
   </div>
 </template>
 
