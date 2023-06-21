@@ -2,10 +2,15 @@
   <div>
     <h1>Pokedex</h1>
     <h1>{{ $store.state.pokedex.length }}</h1>
+    <input type="text" v-model="input_name"/>
+    <button @click="selectType('fire')">poison</button>
     <h1 v-if="$store.state.pokedex.length !== 9">Carregando...</h1>
   <div v-else>
     <div className="card">
-    <router-link v-for="pokemons in $store.state.pokedex" :key="pokemons.data.id" @click="selectPokemon(pokemons.data)" :to="pokemons.data.name">
+    <router-link v-for="pokemons in $store.state.pokedex.filter((e) => e.data.name.startsWith(this.input_name)).filter((e) => {
+      const crossTypes = e.data.types.length === 1 ? e.data.types[0].type.name : e.data.types[0].type.name + e.data.types[1].type.name;
+      return crossTypes.includes(selectedType);
+    })" :key="pokemons.data.id" @click="selectPokemon(pokemons.data)" :to="pokemons.data.name">
       <img :alt="pokemons.data.name" :src="Object.values(pokemons.data.sprites.other)[2].front_default" />
       <div className="name">
         <h2>{{ pokemons.data.name[0].toUpperCase() + pokemons.data.name.substring(1) }}</h2>
@@ -49,16 +54,25 @@ export default defineComponent({
     steel: "#B7B7CE",
     fairy: "#D685AD",
   },
+  input_name: '',
+  selectedType: '',
     }
   },
   methods: {
   selectPokemon(pokeData) {
     this.$store.commit('storePokemon', pokeData);
+  },
+  selectType(type) {
+    console.log('fire' + undefined);
+    console.log(this.$store.state.pokedex[2].data.types.length === 1 ? this.$store.state.pokedex[2].data.types[0].type.name : this.$store.state.pokedex[2].data.types[0].type.name + this.$store.state.pokedex[2].data.types[1].type.name);
+
+    this.selectedType === type ? this.selectedType = '' : this.selectedType = type;
+    
   }
   },
   updated() {
     console.log(this.$store.state.pokedex);
-    console.log(this.colours['normal']);
+    /* console.log(this.colours['normal']); */
   }
 });
 </script>
