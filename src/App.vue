@@ -16,7 +16,7 @@ export default {
     async getPokemons() {
     let results = [];
     await axios
-      .get('https://pokeapi.co/api/v2/pokemon?limit=9')
+      .get('https://pokeapi.co/api/v2/pokemon?limit=151')
       .then((res) => (results = res.data.results || res.data.pokemon))
       .catch((err) => console.log(err));
     let endPoints = results.map((e) => e.url || e.pokemon.url);

@@ -3,8 +3,8 @@
     <h1>Pokedex</h1>
     <h1>{{ $store.state.pokedex.length }}</h1>
     <input type="text" v-model="input_name"/>
-    <button @click="selectType('fire')">poison</button>
-    <h1 v-if="$store.state.pokedex.length !== 9">Carregando...</h1>
+    <button v-for="types in Object.keys(this.colours)" :key="types" @click="selectType(types)" :style="{background: this.selectedType === types ? this.colours[types] : 'gray'}">{{ types }}</button>
+    <h1 v-if="$store.state.pokedex.length !== 151">Carregando...</h1>
   <div v-else>
     <div className="card">
     <router-link v-for="pokemons in $store.state.pokedex.filter((e) => e.data.name.startsWith(this.input_name)).filter((e) => {
@@ -22,6 +22,10 @@
         
       </div>
     </router-link>
+    <h2 v-show="$store.state.pokedex.filter((e) => e.data.name.startsWith(this.input_name)).filter((e) => {
+      const crossTypes = e.data.types.length === 1 ? e.data.types[0].type.name : e.data.types[0].type.name + e.data.types[1].type.name;
+      return crossTypes.includes(selectedType);
+    }).length === 0">Nenhum Pokémon Encontrado.</h2>
   </div>
   </div>
   </div>
@@ -63,7 +67,7 @@ export default defineComponent({
     this.$store.commit('storePokemon', pokeData);
   },
   selectType(type) {
-    console.log('fire' + undefined);
+    console.log(Object.keys(this.colours));
     console.log(this.$store.state.pokedex[2].data.types.length === 1 ? this.$store.state.pokedex[2].data.types[0].type.name : this.$store.state.pokedex[2].data.types[0].type.name + this.$store.state.pokedex[2].data.types[1].type.name);
 
     this.selectedType === type ? this.selectedType = '' : this.selectedType = type;
