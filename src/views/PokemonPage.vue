@@ -108,6 +108,7 @@ export default defineComponent({
   display: flex;
   min-height: 100vh;
   min-width: 1000px;
+  width: 100%;
   align-items: center;
   justify-content: center;
 }
@@ -259,7 +260,7 @@ export default defineComponent({
     width: 50px;
   }
   .numbers {
-    width: 90%;
+    width: 95%;
     font-size: 80%;
   }
   .link {

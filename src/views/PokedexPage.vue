@@ -1,13 +1,20 @@
 <template>
-  <div>
-    <h1>Pokedex</h1>
-    <h1>{{ $store.state.pokedex.length }}</h1>
-    <input type="text" v-model="input_name"/>
-    <button v-for="types in Object.keys(this.colours)" :key="types" @click="selectType(types)" :style="{background: this.selectedType === types ? this.colours[types] : 'gray'}">{{ types }}</button>
+  <div className="screen">
+ <!--    <h1>Pokedex</h1>
+    <h1>{{ $store.state.pokedex.length }}</h1> -->
+    <div className="nav">
+      <img alt="Fidelidex.me" src="fidelidex.png" />
+      <input type="text" v-model="input_name" placeholder="Search Pokemon for Name"/>
+      <div className="btns">
+        <button v-for="types in Object.keys(this.colours)" :key="types" @click="selectType(types)" :style="{background: this.selectedType === types ? this.colours[types] : '#0C7155'}">{{ types[0].toUpperCase() + types.substring(1) }}</button>
+      </div>
+    
+    </div>
+    
     <h1 v-if="$store.state.pokedex.length !== 151">Carregando...</h1>
-  <div v-else>
+  <div v-else className="list">
     <div className="card">
-    <router-link v-for="pokemons in $store.state.pokedex.filter((e) => e.data.name.startsWith(this.input_name)).filter((e) => {
+    <router-link v-for="pokemons in $store.state.pokedex.filter((e) => e.data.name.startsWith(this.input_name.toLowerCase())).filter((e) => {
       const crossTypes = e.data.types.length === 1 ? e.data.types[0].type.name : e.data.types[0].type.name + e.data.types[1].type.name;
       return crossTypes.includes(selectedType);
     })" :key="pokemons.data.id" @click="selectPokemon(pokemons.data)" :to="pokemons.data.name">
@@ -18,11 +25,11 @@
       </div>
       <div className="types">
 
-        <h3 v-for="types in pokemons.data.types" :key="types.type.name" :style="{color: this.colours[types.type.name]}">{{ types.type.name }}</h3>
+        <h3 v-for="types in pokemons.data.types" :key="types.type.name" :style="{background: this.colours[types.type.name], textDecoration: 'underline' + this.colours[types.type.name] }">{{ types.type.name[0].toUpperCase() + types.type.name.substring(1) }}</h3>
         
       </div>
     </router-link>
-    <h2 v-show="$store.state.pokedex.filter((e) => e.data.name.startsWith(this.input_name)).filter((e) => {
+    <h2 v-show="$store.state.pokedex.filter((e) => e.data.name.startsWith(this.input_name.toLowerCase())).filter((e) => {
       const crossTypes = e.data.types.length === 1 ? e.data.types[0].type.name : e.data.types[0].type.name + e.data.types[1].type.name;
       return crossTypes.includes(selectedType);
     }).length === 0">Nenhum Pokémon Encontrado.</h2>
@@ -54,7 +61,7 @@ export default defineComponent({
     rock: "#B6A136",
     ghost: "#735797",
     dragon: "#6F35FC",
-    dark: "#705746",
+    /* dark: "#705746", */
     steel: "#B7B7CE",
     fairy: "#D685AD",
   },
@@ -82,37 +89,112 @@ export default defineComponent({
 </script>
 
 <style>
+.screen {
+  max-width: 1600px;
+  align-items: center;
+  justify-content: center;
+}
+.nav {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  background: #1EA57B;
+  margin-bottom: 10px;
+}
+.nav img{
+  width: 300px;
+  border-radius: 200px;
+  margin: 15px 0;
+}
+.nav input{
+  height: 40px;
+  box-shadow: 0 0 0 0;
+  border: 0 none;
+  outline: 0;
+  border-radius: 30px;
+  width: 15%;
+  min-width: 220px;
+  padding: 0 0 0 8px;
+  font-weight: bold;
+  font-size: 15px;
+}
+.btns {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  width: 40%;
+}
+.btns button{
+  width: 70px;
+  height: 35px;
+  margin: 5px;
+  border-radius: 15px;
+  box-shadow: 0 0 0 0;
+  border: 0 none;
+  outline: 0;
+  cursor: pointer;
+  font-weight: bold;
+}
+.btns button:hover{
+  color: #fff;
+}
+.list {
+  display: flex;
+}
 .card {
   display: flex;
-  flex-direction: column;
-  margin: 20px 10px;
+  flex-wrap: wrap;
   cursor: default;
+  justify-content: center;
+  background: #fff;
 }
-.card img {
+.card a {
+  /* background: blueviolet; */
+  margin: 5px;
+}
+.card a img {
   background: lightgray;
   border-radius: 15px;
-  width: 350px;
+  width: 250px;
 }
 .name {
   display: flex;
+  cursor: default;
 }
 .name h2 {
   margin: 5px 2.5px;
+  text-decoration-line: none;
+  text-decoration: underline white;
+  color: black;
 }
 .name h2:nth-child(2) {
   color: gray;
 }
 .types {
   display: flex;
+  cursor: default;
 }
 .types h3 {
-  width: 25%;
+  width: 30%;
   text-align: center;
-  padding: 2px 0 2px 0;
+  padding: 3px 2px 3px 2px;
   margin-right: 10px;
   border-radius: 15px;
+  color: black;
+  font-size: 15px;
+  font-weight: bold;
 }
 @media screen and (max-width: 760px) {
+  .nav {
+    flex-direction: column;
+  }
+  .btns {
+  width: 90%;
+  margin: 5px 0;
+}
+.list {
+  justify-content: center;
+}
   .card {
     width: 40%;
   }
