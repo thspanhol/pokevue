@@ -3,9 +3,10 @@
 </template>
 
 <script lang="ts">
+import { defineComponent } from "vue";
 import axios from "axios";
 
-export default {
+export default defineComponent({
   name: "App",
   created() {
     this.getPokemons();
@@ -25,7 +26,7 @@ export default {
       this.$store.commit("storePokedex", results);
     },
   },
-};
+});
 </script>
 
 <style>

@@ -1,11 +1,8 @@
 {
   "name": "pokevue",
   "version": "0.1.0",
-  "homepage": "https://thspanhol.github.io/pokevue",
   "private": true,
   "scripts": {
-    "predeploy": "npm run build",
-    "deploy": "gh-pages -d build --continue-on-error",
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build --force",
     "test:unit": "vue-cli-service test:unit",
