@@ -1,3 +1,6 @@
 module.exports = {
-    baseUrl: '/pokevue'
+    baseUrl: '/pokevue',
+    publicPath: process.env.NODE_ENV === 'production'
+    ? '/pokevue/'
+    : '/'
 }
