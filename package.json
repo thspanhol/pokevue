@@ -7,7 +7,7 @@
     "predeploy": "npm run build",
     "deploy": "gh-pages -d build",
     "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build",
+    "build": "vue-cli-service build --force",
     "test:unit": "vue-cli-service test:unit",
     "lint": "vue-cli-service lint"
   },
