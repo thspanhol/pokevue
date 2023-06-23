@@ -131,13 +131,6 @@ export default defineComponent({
       this.$store.commit("storePokemon", pokeData);
     },
     selectType(type: string) {
-      console.log(Object.keys(this.colours));
-      console.log(
-        this.$store.state.pokedex[2].data.types.length === 1
-          ? this.$store.state.pokedex[2].data.types[0].type.name
-          : this.$store.state.pokedex[2].data.types[0].type.name +
-              this.$store.state.pokedex[2].data.types[1].type.name
-      );
       this.selectedType === type
         ? (this.selectedType = "")
         : (this.selectedType = type);

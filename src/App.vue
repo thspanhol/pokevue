@@ -22,7 +22,6 @@ export default defineComponent({
       await axios
         .all(endPoints.map((endpoint) => axios.get(endpoint)))
         .then((res) => (results = res));
-      console.log(results);
       this.$store.commit("storePokedex", results);
     },
   },
