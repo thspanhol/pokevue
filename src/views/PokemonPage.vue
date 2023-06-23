@@ -1,6 +1,5 @@
 <template>
   <div className="page">
-
     <div className="info">
       <div className="image">
         <h1>
@@ -51,16 +50,25 @@
                 pokemon.stat.name.substring(1)
               }}
             </h3>
-            <div className="skill"
-            :style="{ border: '1px solid' + this.colours[$store.state.pokemon.types[0].type.name] }"
+            <div
+              className="skill"
+              :style="{
+                border:
+                  '1px solid' +
+                  this.colours[$store.state.pokemon.types[0].type.name],
+              }"
             >
-              <div className="skill_level"
-              :style="{ width: pokemon.base_stat / 1.6 + '%', background: this.colours[$store.state.pokemon.types[0].type.name]}"
+              <div
+                className="skill_level"
+                :style="{
+                  width: pokemon.base_stat / 1.6 + '%',
+                  background:
+                    this.colours[$store.state.pokemon.types[0].type.name],
+                }"
               ></div>
             </div>
           </div>
         </div>
-
         <router-link to="/" className="link">Back</router-link>
       </div>
     </div>
@@ -75,29 +83,26 @@ export default defineComponent({
   data() {
     return {
       colours: {
-    normal: "#A8A77A",
-    fire: "#EE8130",
-    water: "#6390F0",
-    electric: "#F7D02C",
-    grass: "#7AC74C",
-    ice: "#96D9D6",
-    fighting: "#C22E28",
-    poison: "#A33EA1",
-    ground: "#E2BF65",
-    flying: "#A98FF3",
-    psychic: "#F95587",
-    bug: "#A6B91A",
-    rock: "#B6A136",
-    ghost: "#735797",
-    dragon: "#6F35FC",
-    dark: "#705746",
-    steel: "#B7B7CE",
-    fairy: "#D685AD",
-  },
-    }
-  },
-  updated() {
-    console.log(this.$store.state.pokemon);
+        normal: "#A8A77A",
+        fire: "#EE8130",
+        water: "#6390F0",
+        electric: "#F7D02C",
+        grass: "#7AC74C",
+        ice: "#96D9D6",
+        fighting: "#C22E28",
+        poison: "#A33EA1",
+        ground: "#E2BF65",
+        flying: "#A98FF3",
+        psychic: "#F95587",
+        bug: "#A6B91A",
+        rock: "#B6A136",
+        ghost: "#735797",
+        dragon: "#6F35FC",
+        dark: "#705746",
+        steel: "#B7B7CE",
+        fairy: "#D685AD",
+      },
+    };
   },
 });
 </script>
@@ -268,4 +273,3 @@ export default defineComponent({
   }
 }
 </style>
-

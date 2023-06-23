@@ -1,94 +1,157 @@
 <template>
   <div className="screen">
- <!--    <h1>Pokedex</h1>
-    <h1>{{ $store.state.pokedex.length }}</h1> -->
     <div className="nav">
       <img alt="Fidelidex.me" src="fidelidex.png" />
-      <input type="text" v-model="input_name" placeholder="Search Pokemon for Name"/>
+      <input
+        type="text"
+        v-model="input_name"
+        placeholder="Search Pokemon for Name"
+      />
       <div className="btns">
-        <button v-for="types in Object.keys(this.colours)" :key="types" @click="selectType(types)" :style="{background: this.selectedType === types ? this.colours[types] : '#0C7155'}">{{ types[0].toUpperCase() + types.substring(1) }}</button>
+        <button
+          v-for="types in Object.keys(this.colours)"
+          :key="types"
+          @click="selectType(types)"
+          :style="{
+            background:
+              this.selectedType === types ? this.colours[types] : '#0C7155',
+          }"
+        >
+          {{ types[0].toUpperCase() + types.substring(1) }}
+        </button>
       </div>
-    
     </div>
-    
-    <h1 v-if="$store.state.pokedex.length !== 151">Carregando...</h1>
-  <div v-else className="list">
-    <div className="card">
-    <router-link v-for="pokemons in $store.state.pokedex.filter((e) => e.data.name.startsWith(this.input_name.toLowerCase())).filter((e) => {
-      const crossTypes = e.data.types.length === 1 ? e.data.types[0].type.name : e.data.types[0].type.name + e.data.types[1].type.name;
-      return crossTypes.includes(selectedType);
-    })" :key="pokemons.data.id" @click="selectPokemon(pokemons.data)" :to="pokemons.data.name">
-      <img :alt="pokemons.data.name" :src="Object.values(pokemons.data.sprites.other)[2].front_default" />
-      <div className="name">
-        <h2>{{ pokemons.data.name[0].toUpperCase() + pokemons.data.name.substring(1) }}</h2>
-        <h2>{{ "#" + `00${pokemons.data.id}`.slice(-3) }}</h2>
+    <img
+      v-if="$store.state.pokedex.length !== 151"
+      alt="loading"
+      src="https://raw.githubusercontent.com/thspanhol/pokedex/main/public/poke-loading.gif"
+      className="loading"
+    />
+    <div v-else className="list">
+      <div className="card">
+        <router-link
+          v-for="pokemons in $store.state.pokedex
+            .filter((e) =>
+              e.data.name.startsWith(this.input_name.toLowerCase())
+            )
+            .filter((e) => {
+              const crossTypes =
+                e.data.types.length === 1
+                  ? e.data.types[0].type.name
+                  : e.data.types[0].type.name + e.data.types[1].type.name;
+              return crossTypes.includes(selectedType);
+            })"
+          :key="pokemons.data.id"
+          @click="selectPokemon(pokemons.data)"
+          :to="pokemons.data.name"
+        >
+          <img
+            :alt="pokemons.data.name"
+            :src="Object.values(pokemons.data.sprites.other)[2].front_default"
+          />
+          <div className="name">
+            <h2>
+              {{
+                pokemons.data.name[0].toUpperCase() +
+                pokemons.data.name.substring(1)
+              }}
+            </h2>
+            <h2>{{ "#" + `00${pokemons.data.id}`.slice(-3) }}</h2>
+          </div>
+          <div className="types">
+            <h3
+              v-for="types in pokemons.data.types"
+              :key="types.type.name"
+              :style="{
+                background: this.colours[types.type.name],
+                textDecoration: 'underline' + this.colours[types.type.name],
+              }"
+            >
+              {{
+                types.type.name[0].toUpperCase() + types.type.name.substring(1)
+              }}
+            </h3>
+          </div>
+        </router-link>
+        <h2
+          v-show="
+            $store.state.pokedex
+              .filter((e) =>
+                e.data.name.startsWith(this.input_name.toLowerCase())
+              )
+              .filter((e) => {
+                const crossTypes =
+                  e.data.types.length === 1
+                    ? e.data.types[0].type.name
+                    : e.data.types[0].type.name + e.data.types[1].type.name;
+                return crossTypes.includes(selectedType);
+              }).length === 0
+          "
+        >
+          Nenhum Pokémon Encontrado.
+        </h2>
       </div>
-      <div className="types">
-
-        <h3 v-for="types in pokemons.data.types" :key="types.type.name" :style="{background: this.colours[types.type.name], textDecoration: 'underline' + this.colours[types.type.name] }">{{ types.type.name[0].toUpperCase() + types.type.name.substring(1) }}</h3>
-        
-      </div>
-    </router-link>
-    <h2 v-show="$store.state.pokedex.filter((e) => e.data.name.startsWith(this.input_name.toLowerCase())).filter((e) => {
-      const crossTypes = e.data.types.length === 1 ? e.data.types[0].type.name : e.data.types[0].type.name + e.data.types[1].type.name;
-      return crossTypes.includes(selectedType);
-    }).length === 0">Nenhum Pokémon Encontrado.</h2>
-  </div>
-  </div>
+    </div>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { defineComponent } from "vue";
 
 export default defineComponent({
-  name: 'PokedexPage',
+  name: "PokedexPage",
   data() {
     return {
       colours: {
-    normal: "#A8A77A",
-    fire: "#EE8130",
-    water: "#6390F0",
-    electric: "#F7D02C",
-    grass: "#7AC74C",
-    ice: "#96D9D6",
-    fighting: "#C22E28",
-    poison: "#A33EA1",
-    ground: "#E2BF65",
-    flying: "#A98FF3",
-    psychic: "#F95587",
-    bug: "#A6B91A",
-    rock: "#B6A136",
-    ghost: "#735797",
-    dragon: "#6F35FC",
-    /* dark: "#705746", */
-    steel: "#B7B7CE",
-    fairy: "#D685AD",
-  },
-  input_name: '',
-  selectedType: '',
-    }
+        normal: "#A8A77A",
+        fire: "#EE8130",
+        water: "#6390F0",
+        electric: "#F7D02C",
+        grass: "#7AC74C",
+        ice: "#96D9D6",
+        fighting: "#C22E28",
+        poison: "#A33EA1",
+        ground: "#E2BF65",
+        flying: "#A98FF3",
+        psychic: "#F95587",
+        bug: "#A6B91A",
+        rock: "#B6A136",
+        ghost: "#735797",
+        dragon: "#6F35FC",
+        /* dark: "#705746", */
+        steel: "#B7B7CE",
+        fairy: "#D685AD",
+      },
+      input_name: "",
+      selectedType: "",
+    };
   },
   methods: {
-  selectPokemon(pokeData) {
-    this.$store.commit('storePokemon', pokeData);
+    selectPokemon(pokeData: Array<object>) {
+      this.$store.commit("storePokemon", pokeData);
+    },
+    selectType(type: string) {
+      console.log(Object.keys(this.colours));
+      console.log(
+        this.$store.state.pokedex[2].data.types.length === 1
+          ? this.$store.state.pokedex[2].data.types[0].type.name
+          : this.$store.state.pokedex[2].data.types[0].type.name +
+              this.$store.state.pokedex[2].data.types[1].type.name
+      );
+      this.selectedType === type
+        ? (this.selectedType = "")
+        : (this.selectedType = type);
+    },
   },
-  selectType(type) {
-    console.log(Object.keys(this.colours));
-    console.log(this.$store.state.pokedex[2].data.types.length === 1 ? this.$store.state.pokedex[2].data.types[0].type.name : this.$store.state.pokedex[2].data.types[0].type.name + this.$store.state.pokedex[2].data.types[1].type.name);
-
-    this.selectedType === type ? this.selectedType = '' : this.selectedType = type;
-    
-  }
-  },
-  updated() {
-    console.log(this.$store.state.pokedex);
-    /* console.log(this.colours['normal']); */
-  }
 });
 </script>
 
 <style>
+.loading {
+  margin: 10% 40% 0 40%;
+  width: 50%;
+  max-width: 300px;
+}
 .screen {
   max-width: 1600px;
   align-items: center;
@@ -98,15 +161,15 @@ export default defineComponent({
   display: flex;
   justify-content: space-around;
   align-items: center;
-  background: #1EA57B;
+  background: #1ea57b;
   margin-bottom: 10px;
 }
-.nav img{
+.nav img {
   width: 300px;
   border-radius: 200px;
   margin: 15px 0;
 }
-.nav input{
+.nav input {
   height: 40px;
   box-shadow: 0 0 0 0;
   border: 0 none;
@@ -124,7 +187,7 @@ export default defineComponent({
   justify-content: center;
   width: 40%;
 }
-.btns button{
+.btns button {
   width: 70px;
   height: 35px;
   margin: 5px;
@@ -135,7 +198,7 @@ export default defineComponent({
   cursor: pointer;
   font-weight: bold;
 }
-.btns button:hover{
+.btns button:hover {
   color: #fff;
 }
 .list {
@@ -149,7 +212,6 @@ export default defineComponent({
   background: #fff;
 }
 .card a {
-  /* background: blueviolet; */
   margin: 5px;
 }
 .card a img {
@@ -185,16 +247,19 @@ export default defineComponent({
   font-weight: bold;
 }
 @media screen and (max-width: 760px) {
+  .loading {
+    margin: 10% 25% 0 25%;
+  }
   .nav {
     flex-direction: column;
   }
   .btns {
-  width: 90%;
-  margin: 5px 0;
-}
-.list {
-  justify-content: center;
-}
+    width: 90%;
+    margin: 5px 0;
+  }
+  .list {
+    justify-content: center;
+  }
   .card {
     width: 40%;
   }
